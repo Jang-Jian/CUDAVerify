@@ -23,5 +23,5 @@ Go to *`linux_build.sh`* saved path and also input this command:
 If you install completely and run the testing code and also you can see this result (output has same answer as your output.), congratulations ! Success for CUDA installation !  
 
 <div align="center">
-<img src="img/run_result.jpg" width = "500" height = "287"><br><br>
+<img src="img/run_result.jpg" width = "500" height = "162"><br><br>
 </div>
