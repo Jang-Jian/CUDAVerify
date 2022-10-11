@@ -6,12 +6,22 @@
 
 
 // Kernel function, runs on GPU
-__global__ void add_vectors(float *a, float *b, float *c) {
-		int i = blockIdx.x;
-		
+template<typename dtype>
+__global__ void add_vector_kernel(dtype *a, dtype *b, dtype *c, int size) 
+{
+	int i = blockIdx.x;
+	
+	if (i < size)
+	{
 		c[i] = a[i] + b[i];
+	}
 }
 
+template<typename dtype>
+void gpuVectorAdd(dtype *a_dev, dtype *b_dev, dtype *c_dev, int size)
+{
+	add_vector_kernel<<<size, 1>>>(a_dev, b_dev, c_dev, size);
+}
 
 int main(void) {
 		int count, i;
@@ -44,7 +54,7 @@ int main(void) {
 		cudaMemcpy(b_dev, b, N*sizeof(float), cudaMemcpyHostToDevice);
 		
     // Parallel add c_dev[i] = a_dev[i] + b_dev[i]
-		add_vectors<<< N, 1 >>>(a_dev, b_dev, c_dev);
+		gpuVectorAdd(a_dev, b_dev, c_dev, N);
 
 		// Copy result from GPU to host (CPU)
 		cudaMemcpy(c, c_dev, N*sizeof(float), cudaMemcpyDeviceToHost);
